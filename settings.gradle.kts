@@ -27,5 +27,9 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":shared")
 include(":webApp")
+include(":core")
+include("core:di")

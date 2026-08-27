@@ -1,27 +1,41 @@
 package org.lpmti.maxhelpdesk
 
+import DiProvider
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
+import org.koin.dsl.module
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        QrScannerScreen()
+    val diProvider = DiProvider()
+
+    diProvider.provideModules(
+        listOf(
+            module {
+                single<QrCodeScanner> {
+                    createQrCodeScanner()
+                }
+            }
+        )
+    )
+
+    diProvider.MineKoinApplication {
+        MaterialTheme {
+            QrScannerScreen()
+        }
     }
 }
 
 @Composable
-fun QrScannerScreen() {
-
-    val scanner = remember {
-        createQrCodeScanner()
-    }
-
+fun QrScannerScreen(
+    scanner: QrCodeScanner = koinInject()
+) {
     val scope = rememberCoroutineScope()
 
     var result by remember {
