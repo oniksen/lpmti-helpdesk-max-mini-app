@@ -1,11 +1,6 @@
-@file:OptIn(ExperimentalWasmJsInterop::class)
-
-package org.lpmti.maxhelpdesk
-
 import kotlinx.coroutines.await
 import kotlin.js.JsString
 import kotlin.js.Promise
-
 
 @JsFun("""
     () => {
