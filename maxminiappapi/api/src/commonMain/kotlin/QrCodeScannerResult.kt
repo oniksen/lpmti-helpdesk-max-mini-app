@@ -1,5 +1,3 @@
-package org.lpmti.maxhelpdesk
-
 sealed interface QrCodeScannerResult {
 
     data class Success(

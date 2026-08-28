@@ -1,6 +1,3 @@
-package org.lpmti.maxhelpdesk
-
-import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlin.js.JsString
 import kotlin.js.Promise

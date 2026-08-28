@@ -11,7 +11,13 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.di)
+            implementation(projects.core.navigation.api)
+            implementation(projects.core.navigation.impl)
+
+            implementation(projects.maxminiappapi.api)
+            implementation(projects.maxminiappapi.impl)
+            implementation(projects.features.qrscan.api)
+            implementation(projects.features.qrscan.impl)
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

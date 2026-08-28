@@ -1,20 +1,20 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
     js {
         browser()
-        binaries.executable()
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.shared)
+            implementation(projects.core.navigation.api)
 
-            implementation(libs.compose.ui)
+            implementation(libs.bundles.koin)
+            implementation(libs.bundles.compose)
         }
     }
 }

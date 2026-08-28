@@ -11,7 +11,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.di)
+            implementation(projects.maxminiappapi.api)
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -25,9 +25,6 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-        }
-        jsMain.dependencies {
-            implementation(libs.wrappers.browser)
         }
     }
 }
