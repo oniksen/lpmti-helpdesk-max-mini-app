@@ -18,6 +18,8 @@ kotlin {
             implementation(projects.maxminiappapi.impl)
             implementation(projects.features.qrscan.api)
             implementation(projects.features.qrscan.impl)
+            implementation(projects.features.home.api)
+            implementation(projects.features.home.impl)
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
