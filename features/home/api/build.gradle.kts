@@ -11,9 +11,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.navigation.api)
-
-            implementation(libs.bundles.compose)
-            implementation(libs.bundles.koin)
         }
     }
 }

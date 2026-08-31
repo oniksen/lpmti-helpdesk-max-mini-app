@@ -16,7 +16,6 @@ kotlin {
 
             implementation(projects.maxminiappapi.api)
             implementation(projects.maxminiappapi.impl)
-            implementation(projects.features.qrscan.api)
             implementation(projects.features.qrscan.impl)
             implementation(projects.features.home.api)
             implementation(projects.features.home.impl)

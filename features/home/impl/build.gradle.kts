@@ -14,6 +14,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.features.home.api)
             implementation(projects.core.navigation.api)
+            implementation(projects.features.qrscan.api)
 
             implementation(libs.bundles.compose)
             implementation(libs.bundles.koin)

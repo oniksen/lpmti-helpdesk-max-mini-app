@@ -1,5 +1,6 @@
 package navigation
 
+import AppNavigator
 import FeatureNavModule
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -16,8 +17,10 @@ class HomePageModule : FeatureNavModule {
 
     override fun resolve(
         key: NavKey,
-        onBackPressed: () -> Unit
+        navigator: AppNavigator,
     ): NavEntry<out NavKey> = NavEntry(key = key as HomePageRoute) {
-        HomePage()
+        HomePage(
+            onScanPage = { navigator.navigate(QrScanScreenRoute) }
+        )
     }
 }
