@@ -36,10 +36,16 @@ fun BasicDslContainer(
             startRoute // Передаем объект напрямую в vararg
         )
 
-        // 4. Лямбда для кнопки назад, которая безопасно управляет стеком
-        val onBackClick = {
-            if (navBackStack.size > 1) {
-                navBackStack.removeAt(navBackStack.lastIndex)
+        // Инициализируем навигацию по страницам.
+        val navigator = remember(navBackStack) {
+            object : AppNavigator {
+                override fun navigate(route: NavKey) {
+                    navBackStack.add(route)
+                }
+
+                override fun popBackStack() {
+                    if (navBackStack.size > 1) navBackStack.removeAt(navBackStack.lastIndex)
+                }
             }
         }
 
@@ -51,7 +57,7 @@ fun BasicDslContainer(
                 ?: error("Не найден навигационный модуль для маршрута $key")
 
             // Передаем управление внутрь модуля фичи
-            module.resolve(key = key, onBackPressed = onBackClick) as NavEntry<NavKey>
+            module.resolve(key = key, navigator = navigator) as NavEntry<NavKey>
         }
     }
 }

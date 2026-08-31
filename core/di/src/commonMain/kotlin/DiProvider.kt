@@ -1,12 +1,10 @@
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.navigation3.runtime.NavKey
+import navigation.HomePageModule
+import navigation.HomePageRoute
 import navigation.QrScanModule
-import navigation.QrScanScreenRoute
-import org.koin.compose.KoinApplication
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 class DiProvider {
@@ -17,7 +15,9 @@ class DiProvider {
     // Создаем модуль навигации, где стэк предоставляется через Koin
     private val navigationModule = module {
         // Регистрируем модули фич
-        single<FeatureNavModule> { QrScanModule() }
+        // Инициализация должна проводиться таким образом, иначе следующий фича-модуль перезапишет предыдущий.
+        single { HomePageModule() } bind FeatureNavModule::class
+        single { QrScanModule() } bind FeatureNavModule::class
     }
 
     @Composable
@@ -30,6 +30,6 @@ class DiProvider {
             }
         }
 
-        BasicDslContainer(startRoute = QrScanScreenRoute)
+        BasicDslContainer(startRoute = HomePageRoute)
     }
 }

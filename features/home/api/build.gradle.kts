@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -11,7 +12,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(libs.jetbrains.navigation3.ui)
+            implementation(projects.core.navigation.api)
         }
     }
 }

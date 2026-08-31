@@ -9,12 +9,11 @@ kotlin {
         browser()
     }
 
+    jvm()
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.navigation.api)
-
-            implementation(libs.bundles.koin)
-            implementation(libs.bundles.compose)
         }
     }
 }

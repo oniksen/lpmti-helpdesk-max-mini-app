@@ -6,17 +6,17 @@ plugins {
 }
 
 kotlin {
+    jvm()
+
     js {
         browser()
     }
 
-    jvm()
-
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.features.qrscan.api)
-            implementation(projects.maxminiappapi.api)
+            implementation(projects.features.home.api)
             implementation(projects.core.navigation.api)
+            implementation(projects.features.qrscan.api)
 
             implementation(libs.bundles.compose)
             implementation(libs.bundles.koin)

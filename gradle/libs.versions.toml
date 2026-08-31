@@ -7,6 +7,7 @@ kotlin-wrappers = "2026.8.4"
 material3 = "1.11.0-alpha07"
 koin = "4.0.2"
 multiplatform-nav3-ui = "1.1.1"
+jb-compose-material-icons = "1.7.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -22,6 +23,8 @@ compose-components-resources = { module = "org.jetbrains.compose.components:comp
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlin-wrappers" }
 jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "multiplatform-nav3-ui" }
+compose-uiTooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
+jb-compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "jb-compose-material-icons" }
 
 # Koin
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -40,7 +43,8 @@ compose = [
     "compose-material3",
     "compose-ui",
     "compose-components-resources",
-    "compose-uiToolingPreview"
+    "jb-compose-material-icons-extended",
+    "compose-uiToolingPreview",
 ]
 
 [plugins]
