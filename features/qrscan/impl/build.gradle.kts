@@ -10,6 +10,8 @@ kotlin {
         browser()
     }
 
+    jvm()
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.features.qrscan.api)
@@ -18,6 +20,9 @@ kotlin {
 
             implementation(libs.bundles.compose)
             implementation(libs.bundles.koin)
+        }
+        jvmMain.dependencies {
+            implementation(libs.compose.ui)
         }
     }
 }

@@ -8,6 +8,8 @@ kotlin {
         browser()
     }
 
+    jvm()
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.navigation.api)

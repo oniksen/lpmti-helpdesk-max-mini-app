@@ -6,6 +6,8 @@ plugins {
 }
 
 kotlin {
+    jvm()
+
     js {
         browser()
     }
@@ -18,6 +20,9 @@ kotlin {
 
             implementation(libs.bundles.compose)
             implementation(libs.bundles.koin)
+        }
+        jvmMain.dependencies {
+            implementation(libs.compose.ui)
         }
     }
 }

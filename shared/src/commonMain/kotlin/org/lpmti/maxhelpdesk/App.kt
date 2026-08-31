@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-@Preview
 fun App() {
     // Гарантируем отсутствие лишних рекомпозиций.
     remember { DiProvider() }.MainKoinApplication()
