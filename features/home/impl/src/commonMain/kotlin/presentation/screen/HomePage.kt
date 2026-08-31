@@ -5,22 +5,28 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import max_helpdesk.features.home.impl.generated.resources.Res
+import max_helpdesk.features.home.impl.generated.resources.open_parking_page
+import max_helpdesk.features.home.impl.generated.resources.page_title
+import org.jetbrains.compose.resources.stringResource
+import presentation.intent.HomePageIntent
+import presentation.viewmodel.HomePageViewModel
 
 @Composable
 internal fun HomePage(
-    onScanPage: () -> Unit,
+    homePageViewModel: HomePageViewModel,
 ) {
-
     HomePageContent(
-        onScanPage = onScanPage,
+        onParkingPage = { homePageViewModel.sendIntent(HomePageIntent.OpenParkingPage) },
     )
 }
 
 @Composable
 private fun HomePageContent(
-    onScanPage: () -> Unit,
+    onParkingPage: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -31,27 +37,42 @@ private fun HomePageContent(
                 .align(Alignment.Center)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "Home Page",
-                style = MaterialTheme.typography.headlineLarge,
-            )
+            PageTitle()
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = onScanPage,
-            ) {
-                Text(
-                    text = "Сканировать QR"
-                )
-            }
+            OpenParkingPageButton(onClick = onParkingPage)
         }
+    }
+}
+
+@Composable
+private fun PageTitle() {
+    Text(
+        text = stringResource(resource = Res.string.page_title),
+        style = MaterialTheme.typography.headlineLarge,
+        fontWeight = FontWeight.SemiBold,
+    )
+}
+
+@Composable
+private fun OpenParkingPageButton(
+    onClick: () -> Unit,
+) {
+    Button(
+        onClick = onClick,
+    ) {
+        Text(
+            text = stringResource(resource = Res.string.open_parking_page),
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 }
 
 @Composable
 private fun PreviewState() {
     HomePageContent(
-        onScanPage = { }
+        onParkingPage = { }
     )
 }
 

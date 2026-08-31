@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import presentation.screen.HomePage
+import presentation.viewmodel.HomePageViewModel
 
 class HomePageModule : FeatureNavModule {
     override val serializerModule = SerializersModule {
@@ -19,8 +20,12 @@ class HomePageModule : FeatureNavModule {
         key: NavKey,
         navigator: AppNavigator,
     ): NavEntry<out NavKey> = NavEntry(key = key as HomePageRoute) {
+        val homePageViewModel = HomePageViewModel(
+            navigator = navigator,
+        )
+
         HomePage(
-            onScanPage = { navigator.navigate(QrScanScreenRoute) }
+            homePageViewModel = homePageViewModel,
         )
     }
 }
