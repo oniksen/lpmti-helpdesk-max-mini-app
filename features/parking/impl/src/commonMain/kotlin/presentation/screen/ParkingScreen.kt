@@ -1,59 +1,47 @@
 package presentation.screen
 
-import QrCodeScanner
-import QrCodeScannerResult
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import AdaptiveLayoutWrapper
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.runtime.*
-import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.staticCompositionLocalOf
+import domain.intent.ParkingScreenIntent
+import presentation.actions.ParkingScreenActions
+import presentation.screen.small.ParkingScreenSmallContent
+import presentation.state.ParkingScreenState
+import presentation.viewmodel.ParkingScreenViewModel
+
+val LocalParkingScreenActions = staticCompositionLocalOf<ParkingScreenActions> {
+    error("Local actions not provided")
+}
 
 @Composable
 fun ParkingScreen(
-    scanner: QrCodeScanner = koinInject()
+    viewModel: ParkingScreenViewModel,
 ) {
-    val scope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsState()
+    val parkingScreenActions = ParkingScreenActions(
+        openScan = { viewModel.sendIntent(ParkingScreenIntent.OpenScanner) }
+    )
 
-    var result by remember {
-        mutableStateOf<QrCodeScannerResult?>(null)
-    }
-
-    Button(
-        onClick = {
-            scope.launch {
-                result = scanner.scan()
-            }
-        },
-    ) {
-        Text("Сканировать QR")
-    }
-
-    when (val currentResult = result) {
-        is QrCodeScannerResult.Success -> {
-            Text(
-                text = "Результат: ${currentResult.value}",
-            )
-        }
-
-        QrCodeScannerResult.Unavailable -> {
-            Text(
-                text = "Сканирование QR через MAX недоступно",
-            )
-        }
-
-        is QrCodeScannerResult.Error -> {
-            Text(
-                text = "Ошибка сканирования: ${currentResult.cause.message}",
-            )
-        }
-
-        null -> Unit
+    CompositionLocalProvider(LocalParkingScreenActions provides parkingScreenActions) {
+        ParkingScreenContentShell(
+            uiState = uiState,
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-private fun ParkingScreenContent() {
-
+private fun ParkingScreenContentShell(
+    uiState: ParkingScreenState,
+) {
+    AdaptiveLayoutWrapper(
+        state = uiState,
+        compact = {
+            ParkingScreenSmallContent()
+        }
+    )
 }

@@ -6,7 +6,9 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import org.koin.compose.koinInject
 import presentation.screen.ParkingScreen
+import presentation.viewmodel.ParkingScreenViewModel
 
 class ParkingModule : FeatureNavModule {
     override val serializerModule = SerializersModule {
@@ -19,6 +21,12 @@ class ParkingModule : FeatureNavModule {
         key: NavKey,
         navigator: AppNavigator
     ): NavEntry<out NavKey> = NavEntry(key = key as ParkingScreenRoute) {
-        ParkingScreen()
+        val parkingScreenViewModel = ParkingScreenViewModel(
+            qrCodeScanner = koinInject(),
+        )
+
+        ParkingScreen(
+            viewModel = parkingScreenViewModel,
+        )
     }
 }

@@ -15,6 +15,7 @@ kotlin {
             implementation(projects.core.navigation.api)
             implementation(projects.features.parking.api)
             implementation(projects.features.home.api)
+            implementation(projects.core.uiadaptive)
 
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.bundles.koin)

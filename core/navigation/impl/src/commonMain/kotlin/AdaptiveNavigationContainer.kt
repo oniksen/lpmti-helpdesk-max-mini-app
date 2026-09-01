@@ -1,10 +1,8 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.window.core.layout.WindowSizeClass
 
 @Composable
 internal fun AdaptiveNavigationContainer(
@@ -12,41 +10,34 @@ internal fun AdaptiveNavigationContainer(
     onDestinationChanged: (AppDestination) -> Unit,
     content: @Composable () -> Unit
 ) {
-    val windowsSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
-
-    when {
-        windowsSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_LARGE_LOWER_BOUND) ->
-            LargeScreen(
-                content = content,
-                currentDestination = currentDestination,
-                onDestinationChanged = onDestinationChanged,
-            )
-        windowsSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) ->
-            MediumScreen(
-                expanded = true, content = content,
-                currentDestination = currentDestination,
-                onDestinationChanged = onDestinationChanged,
-            )
-        windowsSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) ->
-            MediumScreen(
-                expanded = false, content = content,
-                currentDestination = currentDestination,
-                onDestinationChanged = onDestinationChanged,
-            )
-        else ->
+    AdaptiveLayoutWrapper(
+        state = content,
+        compact = {
             SmallScreen(
-                content = content,
                 currentDestination = currentDestination,
                 onDestinationChanged = onDestinationChanged,
             )
-    }
+        },
+        medium = {
+            MediumScreen(
+                expanded = false,
+                currentDestination = currentDestination,
+                onDestinationChanged = onDestinationChanged,
+            )
+        },
+        expanded = {
+            LargeScreen(
+                currentDestination = currentDestination,
+                onDestinationChanged = onDestinationChanged,
+            )
+        }
+    )
 }
 
 @Composable
-private fun LargeScreen(
+private fun (@Composable () -> Unit).LargeScreen(
     currentDestination: AppDestination,
     onDestinationChanged: (AppDestination) -> Unit,
-    content: @Composable () -> Unit
 ) {
     PermanentNavigationDrawer(
         drawerContent = {
@@ -71,17 +62,16 @@ private fun LargeScreen(
         }
     ) {
         Box(Modifier.fillMaxSize()) {
-            content()
+            this@LargeScreen.invoke()
         }
     }
 }
 
 @Composable
-private fun MediumScreen(
+private fun (@Composable () -> Unit).MediumScreen(
     expanded: Boolean,
     currentDestination: AppDestination,
     onDestinationChanged: (AppDestination) -> Unit,
-    content: @Composable () -> Unit
 ) {
     val railState = rememberWideNavigationRailState(
         if (expanded) WideNavigationRailValue.Expanded
@@ -104,15 +94,14 @@ private fun MediumScreen(
                 )
             }
         }
-        Box(modifier = Modifier.weight(1f).fillMaxHeight()) { content() }
+        Box(modifier = Modifier.weight(1f).fillMaxHeight()) { this@MediumScreen.invoke() }
     }
 }
 
 @Composable
-private fun SmallScreen(
+private fun (@Composable () -> Unit).SmallScreen(
     currentDestination: AppDestination,
     onDestinationChanged: (AppDestination) -> Unit,
-    content: @Composable () -> Unit
 ) {
     Scaffold(
         bottomBar = {
@@ -129,6 +118,6 @@ private fun SmallScreen(
             }
         }
     ) { innerPadding ->
-        Box(Modifier.fillMaxSize().padding(innerPadding)) { content() }
+        Box(Modifier.fillMaxSize().padding(innerPadding)) { this@SmallScreen.invoke() }
     }
 }

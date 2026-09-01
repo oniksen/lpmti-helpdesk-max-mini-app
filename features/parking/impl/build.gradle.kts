@@ -17,6 +17,7 @@ kotlin {
             implementation(projects.features.parking.api)
             implementation(projects.maxminiappapi.api)
             implementation(projects.core.navigation.api)
+            implementation(projects.core.uiadaptive)
 
             implementation(libs.bundles.compose)
             implementation(libs.bundles.koin)
