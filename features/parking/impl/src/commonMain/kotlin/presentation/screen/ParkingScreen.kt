@@ -4,12 +4,8 @@ import QrCodeScanner
 import QrCodeScannerResult
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.runtime.*
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -54,4 +50,10 @@ fun ParkingScreen(
 
         null -> Unit
     }
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+private fun ParkingScreenContent() {
+
 }

@@ -1,4 +1,5 @@
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -49,15 +50,27 @@ fun BasicDslContainer(
             }
         }
 
-        // 5. Рендерим граф.
-        NavDisplay(
-            backStack = navBackStack,
-        ) { key ->
-            val module = featureModules.firstOrNull { it.canResolve(key) }
-                ?: error("Не найден навигационный модуль для маршрута $key")
+        var currentDestination = remember { AppDestination.PARKING }
 
-            // Передаем управление внутрь модуля фичи
-            module.resolve(key = key, navigator = navigator) as NavEntry<NavKey>
+        LaunchedEffect(currentDestination) {
+            navBackStack.add(currentDestination.route)
+            navBackStack.removeAll { it != currentDestination.route }
+        }
+
+        AdaptiveNavigationContainer(
+            currentDestination = currentDestination,
+            onDestinationChanged = { destination -> currentDestination = destination  },
+        ) {
+            // 5. Рендерим граф.
+            NavDisplay(
+                backStack = navBackStack,
+            ) { key ->
+                val module = featureModules.firstOrNull { it.canResolve(key) }
+                    ?: error("Не найден навигационный модуль для маршрута $key")
+
+                // Передаем управление внутрь модуля фичи
+                module.resolve(key = key, navigator = navigator) as NavEntry<NavKey>
+            }
         }
     }
 }
