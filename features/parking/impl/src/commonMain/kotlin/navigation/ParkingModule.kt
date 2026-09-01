@@ -6,19 +6,19 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import presentation.screen.QrScannerScreen
+import presentation.screen.ParkingScreen
 
-class QrScanModule : FeatureNavModule {
+class ParkingModule : FeatureNavModule {
     override val serializerModule = SerializersModule {
-        polymorphic(NavKey::class) { subclass(QrScanScreenRoute::class, QrScanScreenRoute.serializer()) }
+        polymorphic(NavKey::class) { subclass(ParkingScreenRoute::class, ParkingScreenRoute.serializer()) }
     }
 
-    override fun canResolve(key: NavKey): Boolean = key is QrScanScreenRoute
+    override fun canResolve(key: NavKey): Boolean = key is ParkingScreenRoute
 
     override fun resolve(
         key: NavKey,
         navigator: AppNavigator
-    ): NavEntry<out NavKey> = NavEntry(key = key as QrScanScreenRoute) {
-        QrScannerScreen()
+    ): NavEntry<out NavKey> = NavEntry(key = key as ParkingScreenRoute) {
+        ParkingScreen()
     }
 }

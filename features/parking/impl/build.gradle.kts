@@ -14,7 +14,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.features.qrscan.api)
+            implementation(projects.features.parking.api)
             implementation(projects.maxminiappapi.api)
             implementation(projects.core.navigation.api)
 

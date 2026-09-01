@@ -1,7 +1,7 @@
 package presentation.viewmodel
 
 import AppNavigator
-import navigation.QrScanScreenRoute
+import navigation.ParkingScreenRoute
 import presentation.intent.HomePageIntent
 
 internal class HomePageViewModel(
@@ -14,6 +14,6 @@ internal class HomePageViewModel(
     }
 
     private fun openParkingPage() {
-        navigator.navigate(QrScanScreenRoute)
+        navigator.navigate(ParkingScreenRoute)
     }
 }

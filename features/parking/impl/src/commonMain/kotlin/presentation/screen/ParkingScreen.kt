@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
-fun QrScannerScreen(
+fun ParkingScreen(
     scanner: QrCodeScanner = koinInject()
 ) {
     val scope = rememberCoroutineScope()

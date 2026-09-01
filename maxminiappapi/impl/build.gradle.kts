@@ -9,6 +9,8 @@ kotlin {
         browser()
     }
 
+    jvm()
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.maxminiappapi.api)

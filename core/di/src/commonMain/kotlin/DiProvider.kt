@@ -2,7 +2,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import navigation.HomePageModule
 import navigation.HomePageRoute
-import navigation.QrScanModule
+import navigation.ParkingModule
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -17,7 +17,7 @@ class DiProvider {
         // Регистрируем модули фич
         // Инициализация должна проводиться таким образом, иначе следующий фича-модуль перезапишет предыдущий.
         single { HomePageModule() } bind FeatureNavModule::class
-        single { QrScanModule() } bind FeatureNavModule::class
+        single { ParkingModule() } bind FeatureNavModule::class
     }
 
     @Composable
