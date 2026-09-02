@@ -14,16 +14,20 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.features.parking.api)
-            implementation(projects.maxminiappapi.api)
             implementation(projects.core.navigation.api)
             implementation(projects.core.uiadaptive)
+            implementation(projects.features.parking.api)
+            implementation(projects.maxminiappapi.api)
 
             implementation(libs.bundles.compose)
+            implementation(libs.bundles.composeResources)
+            implementation(libs.bundles.composeAdaptive)
             implementation(libs.bundles.koin)
+            implementation(libs.kotlinx.coroutines.core)
         }
         jvmMain.dependencies {
-            implementation(libs.compose.ui)
+            implementation(projects.features.parking.api)
+            implementation(libs.bundles.composePreview)
         }
     }
 }

@@ -13,13 +13,14 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.navigation.api)
+            implementation(projects.core.uiadaptive)
             implementation(projects.features.parking.api)
             implementation(projects.features.home.api)
-            implementation(projects.core.uiadaptive)
-
             implementation(libs.jetbrains.navigation3.ui)
+
             implementation(libs.bundles.koin)
             implementation(libs.bundles.compose)
+            implementation(libs.bundles.composeIcons)
         }
     }
 }

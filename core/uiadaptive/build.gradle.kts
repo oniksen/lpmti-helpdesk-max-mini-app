@@ -10,7 +10,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.bundles.compose)
+            implementation(libs.compose.runtime)
+            implementation(libs.bundles.composeAdaptive)
         }
     }
 }

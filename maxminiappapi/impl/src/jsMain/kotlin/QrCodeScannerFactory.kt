@@ -23,6 +23,7 @@ import kotlin.js.Promise
 """)
 private external fun isMaxBridgeAvailable(): Boolean
 
+@OptIn(ExperimentalWasmJsInterop::class)
 @JsFun("""
     (fileSelect) => {
         // Создаем чистый JS Promise. Никакой код снаружи не сможет вызвать синхрейт-падение рантайма.
@@ -36,7 +37,9 @@ private external fun isMaxBridgeAvailable(): Boolean
                 
                 // Вызываем нативный метод внутри безопасного контекста
                 webApp.openCodeReader(fileSelect)
-                    .then((res) => resolve(res))
+                    .then((res) => { 
+                        resolve(JSON.stringify(res))    
+                    })
                     .catch((err) => reject(err));
                     
             } catch (error) {
