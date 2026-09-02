@@ -23,7 +23,7 @@ fun ParkingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val parkingScreenActions = ParkingScreenActions(
-        openScan = { viewModel.sendIntent(ParkingScreenIntent.OpenScanner) }
+        openScan = { viewModel.sendIntent(ParkingScreenIntent.OpenScanner) },
     )
 
     CompositionLocalProvider(LocalParkingScreenActions provides parkingScreenActions) {
@@ -33,7 +33,6 @@ fun ParkingScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 private fun ParkingScreenContentShell(
     uiState: ParkingScreenState,
