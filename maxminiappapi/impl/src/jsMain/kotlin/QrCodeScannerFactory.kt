@@ -38,7 +38,7 @@ private external fun isMaxBridgeAvailable(): Boolean
                 // Вызываем нативный метод внутри безопасного контекста
                 webApp.openCodeReader(fileSelect)
                     .then((res) => { 
-                        resolve(JSON.stringify(res))    
+                        resolve(res)    
                     })
                     .catch((err) => reject(err));
                     
@@ -49,10 +49,11 @@ private external fun isMaxBridgeAvailable(): Boolean
         });
     }
 """)
-private external fun openMaxCodeReader(fileSelect: Boolean): Promise<JsString>
+private external fun openMaxCodeReader(fileSelect: Boolean): Promise<JsAny>
 
 private class MaxQrCodeScanner : QrCodeScanner {
 
+    @OptIn(ExperimentalWasmJsInterop::class)
     override suspend fun scan(
         fileSelect: Boolean,
     ): QrCodeScannerResult {
@@ -63,11 +64,11 @@ private class MaxQrCodeScanner : QrCodeScanner {
         }
 
         return try {
-            val result = openMaxCodeReader(fileSelect)
-                .await<JsString>()
-                .toString()
+            val result = openMaxCodeReader(fileSelect).await()
+            val jsObject = result.asDynamic()
+            val scanValue = jsObject.value.toString()
 
-            QrCodeScannerResult.Success(value = result)
+            QrCodeScannerResult.Success(value = scanValue)
         } catch (throwable: Throwable) {
             QrCodeScannerResult.Error(cause = throwable)
         }
