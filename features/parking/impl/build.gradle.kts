@@ -24,6 +24,7 @@ kotlin {
             implementation(libs.bundles.composeAdaptive)
             implementation(libs.bundles.koin)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.bundles.composeIcons)
         }
         jvmMain.dependencies {
             implementation(projects.features.parking.api)
