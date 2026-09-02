@@ -1,12 +1,13 @@
 package presentation.screen
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import max_helpdesk.features.home.impl.generated.resources.Res
 import max_helpdesk.features.home.impl.generated.resources.open_parking_page
@@ -25,7 +26,7 @@ internal fun HomePage(
 }
 
 @Composable
-private fun HomePageContent(
+internal fun HomePageContent(
     onParkingPage: () -> Unit,
 ) {
     Box(
@@ -69,29 +70,3 @@ private fun OpenParkingPageButton(
     }
 }
 
-@Composable
-private fun PreviewState() {
-    HomePageContent(
-        onParkingPage = { }
-    )
-}
-
-@Preview
-@Composable
-private fun HomePagePreviewLight() {
-    MaterialTheme {
-        Surface {
-            PreviewState()
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun HomePagePreviewDark() {
-    MaterialTheme(darkColorScheme()) {
-        Surface {
-            PreviewState()
-        }
-    }
-}

@@ -14,15 +14,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.features.home.api)
             implementation(projects.core.navigation.api)
-            implementation(projects.features.qrscan.api)
+            implementation(projects.features.home.api)
+            implementation(projects.features.parking.api)
 
             implementation(libs.bundles.compose)
-            implementation(libs.bundles.koin)
+            implementation(libs.bundles.composeResources)
         }
         jvmMain.dependencies {
-            implementation(libs.compose.ui)
+            implementation(libs.bundles.composePreview)
         }
     }
 }
