@@ -15,6 +15,7 @@ kotlin {
             implementation(projects.core.di)
 
             implementation(libs.compose.ui)
+            implementation(libs.bundles.compose)
         }
     }
 }

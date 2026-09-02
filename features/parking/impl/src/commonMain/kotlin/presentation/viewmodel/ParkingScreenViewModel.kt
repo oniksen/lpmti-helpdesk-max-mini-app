@@ -22,8 +22,7 @@ class ParkingScreenViewModel(
 
     fun sendIntent(intent: ParkingScreenIntent) {
         when (intent) {
-            is ParkingScreenIntent.OpenScanner -> openScanner(fileSelect = false)
-            ParkingScreenIntent.OpenQrPicker -> openScanner(fileSelect = true)
+            is ParkingScreenIntent.OpenScanner -> openScanner(fileSelect = true)
         }
     }
 

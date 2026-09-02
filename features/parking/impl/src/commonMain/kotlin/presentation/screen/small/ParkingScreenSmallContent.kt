@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import presentation.screen.LocalParkingScreenActions
+import presentation.screen.shared.PassNumberInput
 import presentation.screen.shared.ScanQrButton
 import presentation.state.ParkingScreenState
 
@@ -44,6 +45,7 @@ internal fun ParkingScreenState.ParkingScreenSmallContent() {
                 }
                 null -> Unit
             }
+            PassNumberInput()
             ScanQrButton { localParkingScreenActions.openScan() }
         }
     }

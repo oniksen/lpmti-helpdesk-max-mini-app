@@ -9,9 +9,9 @@ import max_helpdesk.features.parking.impl.generated.resources.parking_scan_qr_bu
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun ScanQrButton(onCLick: () -> Unit) {
+internal fun ScanQrButton(onClick: () -> Unit) {
     Button(
-        onClick = onCLick,
+        onClick = onClick,
     ) {
         Text(
             text = stringResource(resource = Res.string.parking_scan_qr_button),
