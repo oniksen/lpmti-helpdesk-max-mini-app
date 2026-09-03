@@ -24,7 +24,7 @@ internal fun ParkingScreenSmallContent(
 
     LaunchedEffect(effect) {
         effect.collect { effect ->
-            // ОБЯЗАТЕЛЬНО: гасим старый снэкбар, чтобы моментально отобразить новый результат
+            // ОБЯЗАТЕЛЬНО: убираем старый snackbar, чтобы моментально отобразить новый результат
             snackbarHostState.currentSnackbarData?.dismiss()
 
             when (effect) {

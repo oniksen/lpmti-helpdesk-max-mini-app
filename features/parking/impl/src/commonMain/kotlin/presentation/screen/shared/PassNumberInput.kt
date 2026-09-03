@@ -2,7 +2,7 @@ package presentation.screen.shared
 
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 
 @Composable
 internal fun PassNumberInput(
@@ -24,6 +24,6 @@ internal fun PassNumberInput(
         supportingText = {
             if (error != null)
                 Text(text = error)
-        }
+        },
     )
 }

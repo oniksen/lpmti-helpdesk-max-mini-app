@@ -30,5 +30,11 @@ kotlin {
             implementation(projects.features.parking.api)
             implementation(libs.bundles.composePreview)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+        jvmTest.dependencies {
+            implementation(libs.junit)
+        }
     }
 }
