@@ -1,74 +1,79 @@
 package presentation.screen.small
 
-import QrCodeScannerResult
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.QrCodeScanner
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import max_helpdesk.features.parking.impl.generated.resources.Res
-import max_helpdesk.features.parking.impl.generated.resources.parking_scan_qr_button
-import org.jetbrains.compose.resources.stringResource
+import kotlinx.coroutines.flow.SharedFlow
+import presentation.effect.ParkingScreenEffect
 import presentation.screen.LocalParkingScreenActions
 import presentation.screen.shared.PassNumberInput
 import presentation.state.ParkingScreenState
 
 @Composable
-internal fun ParkingScreenState.ParkingScreenSmallContent() {
+internal fun ParkingScreenSmallContent(
+    state: ParkingScreenState,
+    effect: SharedFlow<ParkingScreenEffect>,
+) {
     val localParkingScreenActions = LocalParkingScreenActions.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            println("Qr scan result: $qrCodeScannerResult")
-            when (qrCodeScannerResult) {
-                is QrCodeScannerResult.Success -> {
-                    Text(
-                        text = "Результат: ${qrCodeScannerResult.value}",
+    LaunchedEffect(effect) {
+        effect.collect { effect ->
+            // ОБЯЗАТЕЛЬНО: гасим старый снэкбар, чтобы моментально отобразить новый результат
+            snackbarHostState.currentSnackbarData?.dismiss()
+
+            when (effect) {
+                is ParkingScreenEffect.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Indefinite,
+                        message = effect.message,
                     )
                 }
-                QrCodeScannerResult.Unavailable -> {
-                    Text(
-                        text = "Сканирование QR через MAX недоступно",
-                    )
-                }
-                is QrCodeScannerResult.Error -> {
-                    Text(
-                        text = "Ошибка сканирования: ${qrCodeScannerResult.cause.message}",
-                    )
-                }
-                null -> Unit
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
+        }
+    }
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                PassNumberInput()
-                Spacer(modifier = Modifier.width(4.dp))
-                ScanQrButton(
+                Row(
                     modifier = Modifier
-                        .height(64.dp)
-                        .offset(y = 5.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    localParkingScreenActions.openScan()
+                    PassNumberInput(
+                        number = state.passNumber,
+                        error = state.passError,
+                        onChange = localParkingScreenActions.onNumberChanged,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    ScanQrButton(
+                        modifier = Modifier
+                            .height(60.dp)
+                            .offset(y = (-4).dp)
+                    ) {
+                        localParkingScreenActions.openScan()
+                    }
                 }
             }
         }

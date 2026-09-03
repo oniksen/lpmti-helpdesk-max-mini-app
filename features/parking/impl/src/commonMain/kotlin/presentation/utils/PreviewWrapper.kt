@@ -1,6 +1,5 @@
 package presentation.utils
 
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
@@ -10,7 +9,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import presentation.actions.ParkingScreenActions
 import presentation.screen.LocalParkingScreenActions
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun PreviewWrapper(
     darkMode: Boolean = false,
@@ -18,6 +16,8 @@ internal fun PreviewWrapper(
 ) {
     val parkingScreenActions = ParkingScreenActions(
         openScan = { },
+        resetScanResult = { },
+        onNumberChanged = { },
     )
 
     CompositionLocalProvider(LocalParkingScreenActions provides parkingScreenActions) {

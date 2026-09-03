@@ -1,8 +1,7 @@
 package presentation.state
 
-import QrCodeScannerResult
-
 data class ParkingScreenState(
-    val qrCodeScannerOpen: Boolean = false,
-    val qrCodeScannerResult: QrCodeScannerResult? = null,
+    val passNumber: String = "",
+    val passError: String? = null,
+    val showQrBtnEnabled: Boolean = true,
 )
