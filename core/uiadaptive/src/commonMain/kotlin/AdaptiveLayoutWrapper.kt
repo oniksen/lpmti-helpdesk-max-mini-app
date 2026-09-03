@@ -3,19 +3,37 @@ import androidx.compose.runtime.Composable
 import androidx.window.core.layout.WindowSizeClass
 
 @Composable
-fun<T> AdaptiveLayoutWrapper(
-    state: T,
-    compact: @Composable T.() -> Unit,
-    medium: (@Composable T.() -> Unit)? = null,
-    expanded: @Composable T.() -> Unit = medium ?: compact,
+fun<S, E> AdaptiveLayoutWrapper(
+    state: S,
+    effect: E,
+    compact: @Composable (state: S, effect: E) -> Unit,
+    medium: (@Composable (state: S, effect: E) -> Unit)? = null,
+    expanded: @Composable (state: S, effect: E) -> Unit = medium ?: compact,
 ) {
     val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
     when {
         windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_LARGE_LOWER_BOUND) ->
-            expanded(state)
+            expanded(state, effect)
         windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) ->
-            (medium ?: compact)(state)
+            (medium ?: compact)(state, effect)
         else ->
-            compact(state)
+            compact(state, effect)
+    }
+}
+
+@Composable
+fun AdaptiveLayoutWrapper(
+    compact: @Composable () -> Unit,
+    medium: (@Composable () -> Unit)? = null,
+    expanded: @Composable () -> Unit = medium ?: compact,
+) {
+    val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
+    when {
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_LARGE_LOWER_BOUND) ->
+            expanded()
+        windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) ->
+            (medium ?: compact)()
+        else ->
+            compact()
     }
 }

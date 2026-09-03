@@ -5,13 +5,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 
 @Composable
-internal fun PassNumberInput() {
-    // Используем классический String-state
-    var textState by remember { mutableStateOf("1234567") }
+internal fun PassNumberInput(
+    number: String,
+    error: String? = null,
+    onChange: (String) -> Unit,
+) {
 
     OutlinedTextField(
-        value = textState,
-        onValueChange = { textState = it },
+        value = number,
+        onValueChange = onChange,
         singleLine = true,
         label = {
             Text(text = "Номер пропуска")
@@ -19,5 +21,9 @@ internal fun PassNumberInput() {
         placeholder = {
             Text("1234567")
         },
+        supportingText = {
+            if (error != null)
+                Text(text = error)
+        }
     )
 }

@@ -11,15 +11,16 @@ internal fun AdaptiveNavigationContainer(
     content: @Composable () -> Unit
 ) {
     AdaptiveLayoutWrapper(
-        state = content,
         compact = {
             SmallScreen(
+                content = content,
                 currentDestination = currentDestination,
                 onDestinationChanged = onDestinationChanged,
             )
         },
         medium = {
             MediumScreen(
+                content = content,
                 expanded = false,
                 currentDestination = currentDestination,
                 onDestinationChanged = onDestinationChanged,
@@ -27,6 +28,7 @@ internal fun AdaptiveNavigationContainer(
         },
         expanded = {
             LargeScreen(
+                content = content,
                 currentDestination = currentDestination,
                 onDestinationChanged = onDestinationChanged,
             )
@@ -35,9 +37,10 @@ internal fun AdaptiveNavigationContainer(
 }
 
 @Composable
-private fun (@Composable () -> Unit).LargeScreen(
+private fun LargeScreen(
     currentDestination: AppDestination,
     onDestinationChanged: (AppDestination) -> Unit,
+    content: @Composable () -> Unit
 ) {
     PermanentNavigationDrawer(
         drawerContent = {
@@ -61,17 +64,16 @@ private fun (@Composable () -> Unit).LargeScreen(
             }
         }
     ) {
-        Box(Modifier.fillMaxSize()) {
-            this@LargeScreen.invoke()
-        }
+        Box(Modifier.fillMaxSize()) { content() }
     }
 }
 
 @Composable
-private fun (@Composable () -> Unit).MediumScreen(
+private fun MediumScreen(
     expanded: Boolean,
     currentDestination: AppDestination,
     onDestinationChanged: (AppDestination) -> Unit,
+    content: @Composable () -> Unit
 ) {
     val railState = rememberWideNavigationRailState(
         if (expanded) WideNavigationRailValue.Expanded
@@ -94,12 +96,13 @@ private fun (@Composable () -> Unit).MediumScreen(
                 )
             }
         }
-        Box(modifier = Modifier.weight(1f).fillMaxHeight()) { this@MediumScreen.invoke() }
+        Box(modifier = Modifier.weight(1f).fillMaxHeight()) { content() }
     }
 }
 
 @Composable
-private fun (@Composable () -> Unit).SmallScreen(
+private fun SmallScreen(
+    content: @Composable () -> Unit,
     currentDestination: AppDestination,
     onDestinationChanged: (AppDestination) -> Unit,
 ) {
@@ -118,6 +121,6 @@ private fun (@Composable () -> Unit).SmallScreen(
             }
         }
     ) { innerPadding ->
-        Box(Modifier.fillMaxSize().padding(innerPadding)) { this@SmallScreen.invoke() }
+        Box(Modifier.fillMaxSize().padding(innerPadding)) { content() }
     }
 }

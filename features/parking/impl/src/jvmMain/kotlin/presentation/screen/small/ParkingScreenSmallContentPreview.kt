@@ -1,28 +1,37 @@
 package presentation.screen.small
 
-import QrCodeScannerResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import presentation.effect.ParkingScreenEffect
 import presentation.state.ParkingScreenState
 import presentation.utils.PreviewWrapper
 
-private val PreviewState = ParkingScreenState(
-    qrCodeScannerResult = QrCodeScannerResult.Success(
-        value = "Test scan result",
-    )
-)
+private val previewState = ParkingScreenState()
+internal val previewEffect: SharedFlow<ParkingScreenEffect>
+    field = MutableSharedFlow<ParkingScreenEffect>(
+        replay = 0,
+        extraBufferCapacity = 1
+    ).apply {
+        tryEmit(
+            ParkingScreenEffect.ShowSnackBar(
+                message = "Ошибка MAX"
+            )
+        )
+    }
 
 @Preview(showSystemUi = true, showBackground = true, name = "Light Mode")
 @Composable
 private fun ParkingScreenSmallContentPreviewLight() {
     PreviewWrapper {
-        PreviewState.ParkingScreenSmallContent()
+        ParkingScreenSmallContent(previewState, previewEffect)
     }
 }
 @Preview(showSystemUi = true, showBackground = true, name = "Light Mode")
 @Composable
 private fun ParkingScreenSmallContentPreviewDark() {
     PreviewWrapper(true) {
-        PreviewState.ParkingScreenSmallContent()
+        ParkingScreenSmallContent(previewState, previewEffect)
     }
 }
