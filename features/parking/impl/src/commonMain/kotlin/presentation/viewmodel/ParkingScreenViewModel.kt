@@ -3,6 +3,7 @@ package presentation.viewmodel
 import QrCodeScanner
 import QrCodeScannerResult
 import domain.intent.ParkingScreenIntent
+import domain.model.toPassNumber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -29,7 +30,7 @@ class ParkingScreenViewModel(
         field = MutableStateFlow(ParkingScreenState())
     val effect: SharedFlow<ParkingScreenEffect>
         field = MutableSharedFlow<ParkingScreenEffect>(
-            replay = 0, // Не храним и не переизлучаем старые эффекты при пересоздании экрана
+            replay = 0, // Не храним и не перевыпускаем старые эффекты при пересоздании экрана
             extraBufferCapacity = 1,    // Позволяет делать tryEmit() без блокировки потока
             onBufferOverflow = BufferOverflow.DROP_OLDEST,  // Если буфер забит, старое событие стирается, новое доставляется
         )
@@ -52,7 +53,13 @@ class ParkingScreenViewModel(
                         updateState { copy(passError = result.cause.message) }
                     }
                     is QrCodeScannerResult.Success -> {
-                        updateState { copy(passError = null, passNumber = result.value) }
+                        result.value.toPassNumber()
+                            .onSuccess {
+                                updateState { copy(passError = null, passNumber = it.number) }
+                            }
+                            .onFailure {
+                                updateState { copy(passError = it.message) }
+                            }
                     }
                     is QrCodeScannerResult.Unavailable -> {
                         resetScannerResult()
@@ -75,8 +82,19 @@ class ParkingScreenViewModel(
         ) }
     }
     private fun validatePassNumber(number: String) {
-        // TODO("Валидация номера")
-        updateState { copy(passNumber = number) }
+        if (number.length > 9) return
+
+        if (number.length == 9)
+            number.toPassNumber()
+                .onSuccess {
+                    updateState { copy(passError = null, passNumber = it.number) }
+                }
+                .onFailure {
+                    updateState { copy(passError = it.message) }
+                }
+        else {
+            updateState { copy(passError = null, passNumber = number) }
+        }
     }
 
     private fun updateState(block: ParkingScreenState.() -> ParkingScreenState) =
