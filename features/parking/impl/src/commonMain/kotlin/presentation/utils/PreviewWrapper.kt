@@ -18,6 +18,8 @@ internal fun PreviewWrapper(
         openScan = { },
         resetScanResult = { },
         onNumberChanged = { },
+        checkPass = { },
+        getPassDetails = { },
     )
 
     CompositionLocalProvider(LocalParkingScreenActions provides parkingScreenActions) {

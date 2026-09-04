@@ -9,10 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.SharedFlow
+import presentation.actions.ParkingScreenActions
 import presentation.effect.ParkingScreenEffect
 import presentation.screen.LocalParkingScreenActions
+import presentation.screen.shared.CheckPassButton
 import presentation.screen.shared.PassNumberInput
 import presentation.state.ParkingScreenState
+import presentation.state.PassInputState
 
 @Composable
 internal fun ParkingScreenSmallContent(
@@ -55,27 +58,48 @@ internal fun ParkingScreenSmallContent(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    PassNumberInput(
-                        number = state.passNumber,
-                        error = state.passError,
-                        onChange = localParkingScreenActions.onNumberChanged,
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    ScanQrButton(
-                        modifier = Modifier
-                            .height(60.dp)
-                            .offset(y = (-4).dp)
-                    ) {
-                        localParkingScreenActions.openScan()
+                PassField(
+                    state = state,
+                    localParkingScreenActions = localParkingScreenActions,
+                )
+                CheckPassButton(
+                    passInputState = state.passInputState,
+                    onClick = {
+                        when (state.passInputState) {
+                            PassInputState.Idle -> localParkingScreenActions.checkPass()
+                            PassInputState.Success -> localParkingScreenActions.getPassDetails()
+                            else -> { }
+                        }
                     }
-                }
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun PassField(
+    state: ParkingScreenState,
+    localParkingScreenActions: ParkingScreenActions,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        PassNumberInput(
+            number = state.passNumber,
+            error = state.passError,
+            onChange = localParkingScreenActions.onNumberChanged,
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        ScanQrButton(
+            modifier = Modifier
+                .height(60.dp)
+                .offset(y = (-4).dp)
+        ) {
+            localParkingScreenActions.openScan()
         }
     }
 }
@@ -87,6 +111,11 @@ private fun ScanQrButton(
 ) {
     FilledIconButton(
         modifier = modifier,
+        colors = IconButtonDefaults
+            .iconButtonColors()
+            .copy(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ),
         onClick = onClick,
     ) {
         Icon(

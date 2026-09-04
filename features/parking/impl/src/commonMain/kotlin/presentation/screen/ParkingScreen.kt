@@ -32,6 +32,8 @@ fun ParkingScreen(
             openScan = { viewModel.sendIntent(ParkingScreenIntent.OpenScanner) },
             resetScanResult = { viewModel.sendIntent(ParkingScreenIntent.ResetScannerResult) },
             onNumberChanged = { viewModel.sendIntent(ParkingScreenIntent.OnNumberChanged(it)) },
+            checkPass = { viewModel.sendIntent(ParkingScreenIntent.CheckPass) },
+            getPassDetails = { viewModel.sendIntent(ParkingScreenIntent.GetPassDetails) },
         )
     }
 
