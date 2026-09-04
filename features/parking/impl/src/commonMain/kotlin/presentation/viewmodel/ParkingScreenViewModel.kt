@@ -20,6 +20,7 @@ import max_helpdesk.features.parking.impl.generated.resources.parking_scan_max_u
 import org.jetbrains.compose.resources.getString
 import presentation.effect.ParkingScreenEffect
 import presentation.state.ParkingScreenState
+import presentation.state.PassInputState
 
 class ParkingScreenViewModel(
     private val qrCodeScanner: QrCodeScanner
@@ -39,7 +40,9 @@ class ParkingScreenViewModel(
         when (intent) {
             is ParkingScreenIntent.OpenScanner -> openScanner(fileSelect = true)
             is ParkingScreenIntent.ResetScannerResult -> resetScannerResult()
-            is ParkingScreenIntent.OnNumberChanged -> { validatePassNumber(intent.number) }
+            is ParkingScreenIntent.OnNumberChanged -> updateInputNumber(intent.number)
+            is ParkingScreenIntent.CheckPass -> checkInputPass()
+            ParkingScreenIntent.GetPassDetails -> openPassDetailsScreen()
         }
     }
 
@@ -81,22 +84,52 @@ class ParkingScreenViewModel(
             passNumber = "",
         ) }
     }
-    private fun validatePassNumber(number: String) {
-        if (number.length > 9) return
+    private fun updateInputNumber(number: String) {
+        if (number.length > PASS_NUMBER_MAX_LENGTH) return
 
-        if (number.length == 9)
-            number.toPassNumber()
+        updateState { copy(passNumber = number) }
+    }
+    private fun checkInputPass() {
+        val passSnapshot = uiState.value.passNumber
+        validatePassNumber(passSnapshot)
+    }
+    private fun validatePassNumber(number: String) {
+        scope.launch(Dispatchers.Main) {
+            updateState { copy(passInputState = PassInputState.Checking) }
+
+            val passNumber = withContext(Dispatchers.Default) { number.toPassNumber() }
+
+            passNumber
                 .onSuccess {
-                    updateState { copy(passError = null, passNumber = it.number) }
+                    updateState {
+                        copy(
+                            passError = null,
+                            passInputState = PassInputState.Success
+                        )
+                    }
                 }
                 .onFailure {
-                    updateState { copy(passError = it.message) }
+                    updateState {
+                        copy(
+                            passError = it.message,
+                            passInputState = PassInputState.Idle
+                        )
+                    }
                 }
-        else {
-            updateState { copy(passError = null, passNumber = number) }
+        }
+    }
+    private fun openPassDetailsScreen() {
+        scope.launch(Dispatchers.Main) {
+            effect.emit(ParkingScreenEffect.ShowSnackBar(
+                message = "В разработке"
+            ))
         }
     }
 
     private fun updateState(block: ParkingScreenState.() -> ParkingScreenState) =
         uiState.update { state -> block(state) }
+
+    private companion object {
+        const val PASS_NUMBER_MAX_LENGTH = 9
+    }
 }

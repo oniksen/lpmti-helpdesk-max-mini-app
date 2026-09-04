@@ -8,7 +8,9 @@ import presentation.effect.ParkingScreenEffect
 import presentation.state.ParkingScreenState
 import presentation.utils.PreviewWrapper
 
-private val previewState = ParkingScreenState()
+private val previewState = ParkingScreenState(
+    passError = "Ошибка ввода"
+)
 internal val previewEffect: SharedFlow<ParkingScreenEffect>
     field = MutableSharedFlow<ParkingScreenEffect>(
         replay = 0,
